@@ -21,7 +21,8 @@ namespace PactNet.Mocks.MockHttpService.Matchers.Regex
 
         public MatcherResult Match(string path, JToken expected, JToken actual)
         {
-            var act = actual as JValue;
+            //var act = actual as JValue;
+            var act = actual.SelectToken(path) as JValue;
             var matches = act != null && System.Text.RegularExpressions.Regex.IsMatch(act.Value.ToString(), Regex);
 
             return matches ?
