@@ -25,9 +25,8 @@ namespace PactNet.Mocks.MockHttpService.Models
         [JsonConverter(typeof(PreserveCasingDictionaryConverter))]
         public IDictionary<string, string> Headers { get; set; }
 
-        [JsonIgnore]
         [JsonProperty(PropertyName = "matchingRules")]
-        internal IDictionary<string, IMatcher> MatchingRules { get; private set; }
+        public IDictionary<string, IMatcher> MatchingRules { get; private set; }
 
         [JsonProperty(PropertyName = "body", NullValueHandling = NullValueHandling.Include)]
         public dynamic Body
@@ -48,10 +47,11 @@ namespace PactNet.Mocks.MockHttpService.Models
 
         private dynamic ParseBodyMatchingRules(dynamic body)
         {
-            MatchingRules = new Dictionary<string, IMatcher>
-            {
-                { DefaultHttpBodyMatcher.Path, new DefaultHttpBodyMatcher(true) }
-            };
+            if (MatchingRules == null)
+                MatchingRules = new Dictionary<string, IMatcher>
+                {
+                    {DefaultHttpBodyMatcher.Path, new DefaultHttpBodyMatcher(true)}
+                };
 
             if (body == null)
             {
